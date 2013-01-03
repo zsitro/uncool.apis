@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<!--
+  Created using jsbin.com
+  Author: Gabor Zsoter
+  Source can be edited via http://jsbin.com/ayanot/3/edit
+-->
+
+<head>
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <meta charset=utf-8/>
+    <title>JS Bin</title>
+    <style id="jsbin-css">
+        body {
+            color: #666;
+            font-family: sans-serif;
+        }
+
+        div {
+            padding: 4px;
+            margin: 4px;
+        }
+
+        .bakery {
+            border: 2px solid green;
+            color: green;
+        }
+
+        .beforebegin-bakery {
+            border: 2px solid blue;
+            color: blue;
+        }
+
+        .afterbegin-bakery {
+            border: 2px solid magenta;
+            color: magenta;
+        }
+
+        .beforeend-bakery {
+            border: 2px solid navy;
+            color: blue;
+        }
+
+        .afterend-bakery {
+            border: 2px solid red;
+            color: magenta;
+        }
+
+        .harakiri {
+            background: purple;
+            color: white;
+        }
+
+        .coffee-order {
+            width: 100%;
+            height: 100px;
+        }
+
+        .progress {
+            color: red;
+        }
+
+        .progress span {
+            font-size: 1.6em;
+            color: green;
+            font-weight: bold;
+        }
+
+        .elementUnderCursor {
+            font-family: monospace;
+            color: blue;
+        }
+
+        .u600 {
+            color: red
+        }
+    </style>
+</head>
+
+<body>
+
+<!--  ========================================  -->
+
+<h1>childrens & siblings</h1>
+<code>ul#list1</code>
+
+<ul id="list1">
+    <li>Item 1</li>
+    <li id="secondLi">Item 2 <code>li#secondLi</code>
+    </li>
+    <li>Item 3</li>
+</ul>
+<button data-jscall="childNodes">childNodes</button>
+<button data-jscall="children">children</button>
+<button data-jscall="firstChild">firstChild</button>
+<button data-jscall="firstElementChild">firstElementChild</button>
+<button data-jscall="nextElementSibling">nextElementSibling</button>
+<h2>contains</h2>
+
+<button data-jscall="contains">#list1 <strong>contains</strong> #secondLi</button>
+
+<!--  ========================================  -->
+
+<h1>insertAdjacentHTML</h1>
+
+<div class="bakery" id="bakery"><code>div#bakery</code>
+</div>
+<button data-jscall="beforebegin">beforebegin</button>
+<button data-jscall="afterbegin">afterbegin</button>
+<button data-jscall="beforeend">beforeend</button>
+<button data-jscall="afterend">afterend</button>
+<h1>outerHTML</h1>
+
+<div class="harakiri" id="harakiri"><code>div#harakiri</code>
+
+    <p>paragraph #1</p>
+
+    <p>paragraph #2</p>
+</div>
+<button data-jscall="getOuterHTML">get outerHTML</button>
+<button data-jscall="setOuterHTML">set outerHTML</button>
+
+<!--  ========================================  -->
+
+<h1>document.implementation.createHTMLDocument</h1>
+
+<button data-jscall="createHTMLDocument">createHTMLDocument</button>
+
+<!--  ========================================  -->
+
+<h1>setSelectionRange</h1>
+Coffee order:
+<textarea class="coffee-order" id="coffee-order">Three and a half megatons please!</textarea>
+<button data-jscall="setSelectionRange">setSelectionRange</button>
+<button data-jscall="getSelectionRange">getSelectionRange</button>
+<button data-jscall="getActiveElement">getActiveElement</button>
+
+<!--  ========================================  -->
+
+<h1>FormData</h1>
+Guess the next global economic crisis:
+<form id="crisis">
+    <select name="year">
+        <option>2013</option>
+        <option>2014</option>
+        <option>2015</option>
+    </select>
+    <br>Select a photo of your favorite windows wallpaper:
+    <input type="file" name="file1">
+</form>
+<br>
+<span id="progress" class="progress"></span>
+<br>
+<button data-jscall="FormData">new FormData & xhr.send()</button>
+
+<!--  ========================================  -->
+
+<h1>matchesSelector()</h1>
+
+<div class="sillyDiv" id="selectMe"><code>div#selectMe</code>
+</div>
+<button data-jscall="matchesSelector">matchesSelector #selectMe</button>
+
+<!--  ========================================  -->
+
+<h1>getBoundingClientRect()</h1>
+
+<div class="boundingDiv" id="boundingDiv"><code>div#boundingDiv</code>
+</div>
+<button data-jscall="getBoundingClientRect">getBoundingClientRect #boundingDiv</button>
+
+<!--  ========================================  -->
+
+<h1>elementFromPoint()</h1>
+Element under mouse pointer:
+<div id="elementUnderCursor" class="elementUnderCursor"></div>
+
+<!--  ========================================  -->
+
+<h1>matchMedia()</h1>
+
+<button data-jscall="startMediaListener">startMediaListener</button>
+(max-width:600px): <span id="u600" class="u600"></span>
+
+
+<script>
+/*==== UNCOOL APIs Demonstration ====*/
+(function (w, d, $) {
+
+    "use strict";
+
+    var console = w.console;
+
+    var exp = {};
+
+    var _get = function (e) {
+
+        return d.getElementById(e);
+    };
+
+    // childNodes
+    exp.childNodes = function () {
+
+        var obj = _get('list1').childNodes;
+
+        console.log(obj.length, obj[0].nodeName, obj);
+
+        return obj;
+    };
+
+    // children
+    exp.children = function () {
+
+        var obj = _get('list1').children;
+
+        console.log(obj.length, obj[0].nodeName, obj);
+
+        return obj;
+    };
+
+    // firstChild
+    exp.firstChild = function () {
+
+        var obj = _get('list1').firstChild;
+
+        console.log(obj.nodeName);
+
+        return obj;
+    };
+
+    // firstElementChild
+    exp.firstElementChild = function () {
+
+        var obj = _get('list1').firstElementChild;
+
+        console.log(obj.nodeName, obj.innerHTML);
+        return obj;
+    };
+
+    // nextElementSibling
+    exp.nextElementSibling = function () {
+
+        var obj = _get('list1').firstElementChild.nextElementSibling;
+
+        console.log(obj.nodeName, obj.innerHTML);
+        return obj;
+    };
+
+
+    // contains
+    exp.contains = function () {
+
+        var obj = _get('list1').contains(_get('secondLi'));
+
+        console.log(!!obj);
+        return !!obj;
+    };
+
+    // beforebegin
+    exp.beforebegin = function () {
+
+        var obj = _get('bakery').insertAdjacentHTML('beforebegin', "<div class='beforebegin-bakery'><code>div.beforebegin-bakery</code></div>");
+    };
+
+    // afterbegin
+    exp.afterbegin = function () {
+
+        var obj = _get('bakery').insertAdjacentHTML('afterbegin', "<div class='afterbegin-bakery'><code>div.afterbegin-bakery</code></div>");
+    };
+
+    // beforeend
+    exp.beforeend = function () {
+
+        var obj = _get('bakery').insertAdjacentHTML('beforeend', "<div class='beforeend-bakery'><code>div.beforeend-bakery</code></div>");
+    };
+
+    // afterend
+    exp.afterend = function () {
+
+        var obj = _get('bakery').insertAdjacentHTML('afterend', "<div class='afterend-bakery'><code>div.afterend-bakery</code></div>");
+    };
+
+    // getOuterHTML
+    exp.getOuterHTML = function () {
+
+        var obj = _get('harakiri').outerHTML;
+
+        console.log(obj.toString());
+    };
+
+    // setOuterHTML
+    exp.setOuterHTML = function () {
+
+        var obj = _get('harakiri').outerHTML = "My favorite pet is:<select><option>squirel</option><option>cat</option></select><br>";
+    };
+
+    // createHTMLDocument
+    exp.createHTMLDocument = function () {
+
+        var obj = d.implementation.createHTMLDocument("new");
+
+        obj.body.innerHTML = "<p>Do I look uncool?</p>";
+        console.log(obj, obj.body);
+
+    };
+
+    // setSelectionRange
+    exp.setSelectionRange = function () {
+
+        var obj = _get('coffee-order');
+
+        obj.focus();
+        obj.select();
+        obj.setSelectionRange(17, 25);
+    };
+
+    // getSelectionRange
+    exp.getSelectionRange = function () {
+
+        var obj = _get('coffee-order');
+
+        console.log(obj.selectionStart, obj.selectionEnd);
+        // On button click => textarea loses focus so you can't see the current selection range.
+        obj.focus();
+    };
+
+    // getActiveElement
+    exp.getActiveElement = function () {
+
+        // Set active element
+        var objInFocus = _get('coffee-order');
+
+        objInFocus.focus();
+        var obj = d.activeElement;
+        console.log(obj);
+    };
+
+    // FormData
+    exp.FormData = function () {
+
+        // Set active element
+        var data = new FormData(_get('crisis'));
+        console.log('data:', data);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("post", "/fake", true);
+
+        //xhr.responseType = "<text|document...etc>";
+        xhr.timeout = 5000;
+        xhr.ontimeout = function () {
+            console.log('Request timeout!');
+        };
+
+        xhr.upload.onprogress = function (event) {
+            var percentage = Math.ceil(event.loaded / event.total * 1e2);
+            _get('progress').innerHTML = 'upload progress: <span>' + percentage + '%</span>';
+        };
+
+        xhr.send(data);
+        console.log("xhr.send called, take a look at Network panel [XHR]. <year> parameter should be in the request payload");
+    };
+
+    // matchesSelector
+    exp.matchesSelector = function () {
+        // Select proper vendor prefix: <moz|webkit|ms|o>
+        var isThisObjHasClass = d.getElementById("selectMe").webkitMatchesSelector('.sillyDiv');
+        console.log("#selectMe has class '.sillyDiv' is:" + isThisObjHasClass);
+    };
+
+    // getBoundingClientRect
+    exp.getBoundingClientRect = function () {
+
+        var boundingBox = d.getElementById("boundingDiv").getBoundingClientRect();
+
+        console.log("---Obj rect:--- \n\t left:\t\t " +
+                boundingBox.left + "\n\t top:\t\t" +
+                boundingBox.top + "\n\t right:\t\t" +
+                boundingBox.right + "\n\t bottom:\t" +
+                boundingBox.bottom + "\n\n\t width:\t\t" +
+                boundingBox.width + "\n\t height:\t" +
+                boundingBox.height);
+    };
+
+
+    // startMediaListener
+    exp.startMediaListener = function () {
+
+        var mql = w.matchMedia("(max-width:600px)");
+
+        mql.addListener(function (mql) {
+            _get('u600').innerHTML = mql.matches;
+        });
+    };
+
+
+    w.uncool = exp;
+
+})(window, document, $);
+
+
+$(function () {
+
+    $('button').on('click', function () {
+        var cmd = $(this).data('jscall');
+        uncool[cmd] && uncool[cmd]();
+    });
+
+    $(document).mousemove(function (e) {
+        var obj = document.elementFromPoint(e.pageX, e.pageY - $(window).scrollTop());
+        $('#elementUnderCursor').html("" + obj.tagName + "#" + obj.id);
+    });
+
+});
+</script>
+
+</body>
+
+</html>
